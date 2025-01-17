@@ -1,9 +1,11 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class GameHandler : MonoBehaviour
 {
     public static GameHandler instance;
+    public UnityEvent Next;
 
     private List<GridTransform> GridObjects = new();
 
@@ -68,10 +70,15 @@ public class GameHandler : MonoBehaviour
 
         return null;
     }
+#nullable enable
 
     public void AddGridObject(GridTransform gridTransform)
     {
         GridObjects.Add(gridTransform);
+        EnemyAi enemyAi = gridTransform.gameObject.GetComponent<EnemyAi>();
+        if (enemyAi)
+        {
+            Next.AddListener(enemyAi.Next);
+        }
     }
-#nullable enable
 }

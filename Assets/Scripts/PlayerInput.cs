@@ -39,26 +39,33 @@ public class PlayerInput : MonoBehaviour
         }
         else if (Input.GetKeyDown(KeyCode.W))
         {
-            gridMover.Move(gridTransform.GridPosition + Vector2.up);
+            Move(Vector2.up);
         }
         else if (Input.GetKeyDown(KeyCode.A))
         {
-            gridMover.Move(gridTransform.GridPosition + Vector2.left);
+            Move(Vector2.left);
         }
         else if (Input.GetKeyDown(KeyCode.S))
         {
-            gridMover.Move(gridTransform.GridPosition + Vector2.down);
+            Move(Vector2.down);
         }
         else if (Input.GetKeyDown(KeyCode.D))
         {
-            gridMover.Move(gridTransform.GridPosition + Vector2.right);
+            Move(Vector2.right);
         }
+    }
+
+    void Move(Vector2 direction)
+    {
+        gridMover.Move(gridTransform.GridPosition + direction);
+        GameHandler.instance.Next.Invoke();
     }
 
     void Attack(Vector2 direction)
     {
-        GameObject newWeaponObject = Instantiate(WeaponObject, gridTransform.GridPosition + direction + GameHandler.instance.GetGridZeroPosition(), Quaternion.identity);
+        GameObject newWeaponObject = Instantiate(WeaponObject, gridTransform.GridPosition + direction + GameHandler.instance.GetGridZeroPosition(), Quaternion.Euler(0, 0, GetRotationDegreeForDirection(direction)));
         GameObject hitObject = GameHandler.instance.GetGridObjectOnPosition(gridTransform.GridPosition + direction);
+
         if (hitObject != null)
         {
             Health hitHealth = hitObject.GetComponent<Health>();
@@ -68,5 +75,24 @@ public class PlayerInput : MonoBehaviour
             }
         }
         Destroy(newWeaponObject, .2f);
+
+        GameHandler.instance.Next.Invoke();
+    }
+
+    float GetRotationDegreeForDirection(Vector2 direction)
+    {
+        if (direction == Vector2.up)
+        {
+            return 90;
+        }
+        else if (direction == Vector2.left)
+        {
+            return 180;
+        }
+        else if (direction == Vector2.down)
+        {
+            return 270;
+        }
+        return 0;
     }
 }
