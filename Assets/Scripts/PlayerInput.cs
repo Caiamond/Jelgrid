@@ -1,5 +1,13 @@
 using UnityEngine;
 
+public enum WeaponType
+{
+    Dagger,
+    Sword,
+    Bow,
+
+}
+
 public class PlayerInput : MonoBehaviour
 {
     [SerializeField]
@@ -7,6 +15,9 @@ public class PlayerInput : MonoBehaviour
 
     private GridTransform gridTransform;
     private GridMover gridMover;
+
+    [SerializeField]
+    private WeaponType equippedWeaponType = WeaponType.Dagger;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
